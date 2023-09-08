@@ -8,7 +8,7 @@ class KnightPathFinder
 
     def initialize(start_pos)
         @root_node = PolyTreeNode.new(start_pos)
-        @move_tree = [[@root_node.value]]
+        @move_tree = [@root_node.value]
     end
 
     def build_move_tree
