@@ -13,5 +13,17 @@ class PolyTreeNode
         @parent.children << self if @parent != nil  
     end
 
-    d
+    def add_child(child)
+        child.parent = self
+    end
+
+    def remove_child(child)
+        raise 'error' if child.parent.nil?
+        child.parent = nil
+    end
+    
+    def dfs(target)
+        return self if self.value == target
+        
+    end
 end
