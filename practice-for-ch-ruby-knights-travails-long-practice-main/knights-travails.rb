@@ -40,8 +40,6 @@ class KnightPathFinder
             if !considered_positions.include?([x,y])
                 new_moves << [x,y]
                 considered_positions << [x,y]
-            else
-                considered_positions << [x,y]
             end
         end
 
@@ -49,32 +47,18 @@ class KnightPathFinder
     end
 
     def build_move_tree
-        queue = [@root_node.value]
+        queue = [@root_node]
 
         until queue.empty?
+            current_node = queue.shift
 
-            # new_pos = queue.shift
-            # if new_pos == @root_node.value
-            #     current_node = @root_node
-            # else
-            #     current_node = PolyTreeNode.new(new_pos)
-            # end
-
-            # # debugger
-            # new_move_positions(new_pos).each do |child|
-            #     current_node.add_child(PolyTreeNode.new(child))
-            #     queue << child
-            #     current_node.children << child
-            # end
-
-            new_pos = queue.shift
-            # current_node = PolyTreeNode.new(new_pos)
-            new_move_positions(new_pos.value).each do |child|
+            new_move_positions(current_node.value).each do |child|
                 child_node = PolyTreeNode.new(child)
                 child_node.parent = current_node
-                current_node.add_child(child_node)
+
                 queue << child_node
             end
+
         end
 
         @root_node
@@ -86,3 +70,4 @@ p KnightPathFinder.valid_moves([2,1])
 p kpf.new_move_positions([2,1])
 p kpf.new_move_positions([2,1])
 p kpf.build_move_tree
+p kpf.considered_positions.length
