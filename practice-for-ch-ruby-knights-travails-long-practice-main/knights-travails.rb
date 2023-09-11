@@ -1,5 +1,6 @@
 require_relative 'poly_tree_node'
 require_relative 'board'
+require 'byebug'
 
 class KnightPathFinder
     attr_accessor :considered_positions, :move_tree
@@ -25,36 +26,52 @@ class KnightPathFinder
 
     def initialize(start_pos)
         @considered_positions = [start_pos]
-        @root_node = PolyTreeNode.new(start_pos)
-        @move_tree = [@root_node.value]
+        @root_node = start_pos
         @board = Board.new
     end
 
     def new_move_positions(pos)
         row, col = pos
+        new_moves = []
 
         KnightPathFinder.valid_moves(pos).select do |move|
             x, y = move
+
             if !considered_positions.include?([x,y])
+                new_moves << [x,y]
+                considered_positions << [x,y]
+            else
                 considered_positions << [x,y]
             end
         end
 
-        considered_positions
+        new_moves
     end
 
-    def build_move_tree(end_pos)
-        @move_tree
-        until move_tree.empty?
-            new_pos = move_tree.shift
-            return end_pos if new_pos == end_pos
-            @move_tree += new_move_positions(new_pos)
+    def build_move_tree
+        queue = [@root_node]
+
+
+        until queue.empty?
+
+            new_pos = queue.shift
+
+            current_node = PolyTreeNode.new(new_pos)
+
+            # debugger
+            new_move_positions(new_pos).each do |child|
+                current_node.add_child(PolyTreeNode.new(child))
+                queue << child
+            end
+
         end
-        nil
+
+        queue
     end
 end
 
 kpf = KnightPathFinder.new([0,0])
-p KnightPathFinder.valid_moves([0,1])
-p kpf.new_move_positions([0,2])
-p kpf.build_move_tree([3,4])
+p KnightPathFinder.valid_moves([2,1])
+p kpf.new_move_positions([2,1])
+p kpf.new_move_positions([2,1])
+p kpf.build_move_tree
