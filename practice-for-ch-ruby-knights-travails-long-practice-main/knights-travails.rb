@@ -30,10 +30,6 @@ class KnightPathFinder
         @board = Board.new
     end
 
-    def build_move_tree
-        @move_tree
-    end
-
     def new_move_positions(pos)
         row, col = pos
 
@@ -46,8 +42,19 @@ class KnightPathFinder
 
         considered_positions
     end
+
+    def build_move_tree(end_pos)
+        @move_tree
+        until move_tree.empty?
+            new_pos = move_tree.shift
+            return end_pos if new_pos == end_pos
+            @move_tree += new_move_positions(new_pos)
+        end
+        nil
+    end
 end
 
 kpf = KnightPathFinder.new([0,0])
 p KnightPathFinder.valid_moves([0,1])
 p kpf.new_move_positions([0,2])
+p kpf.build_move_tree([3,4])
